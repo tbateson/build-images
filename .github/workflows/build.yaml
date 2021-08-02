@@ -20,9 +20,12 @@ jobs:
       env:
         DOCKER_BUILDKIT: 1
 
+    - name: Login to DockerHub
+      if: startsWith(github.ref, 'refs/tags/')
+      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
+
     - name: Push Docker Images
       if: startsWith(github.ref, 'refs/tags/')
-      run: echo "$DOCKERHUB_TOKEN" | docker login --username 76eddge --password-stdin && ./build.sh --push
+      run: ./build.sh --push
       env:
         DOCKER_BUILDKIT: 1
-        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

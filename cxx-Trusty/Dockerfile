@@ -1,15 +1,11 @@
-FROM ubuntu:xenial AS build
+FROM ubuntu:trusty AS build
 
-RUN apt-get update && \
-	DEBIAN_FRONTEND=noninteractive apt-get install -y locales && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US en_US.UTF-8
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
 RUN apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y git g++ g++-aarch64-linux-gnu g++-arm-linux-gnueabihf g++-powerpc-linux-gnu g++-powerpc64le-linux-gnu make && \
-	DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y lib32stdc++-5-dev lib32gcc-5-dev libc6-dev-i386 libx32stdc++-5-dev libx32gcc-5-dev libc6-dev-x32 && \
+	DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y lib32stdc++-4.8-dev lib32gcc-4.8-dev libc6-dev-i386 libx32stdc++-4.8-dev libx32gcc-4.8-dev libc6-dev-x32 && \
 	ln -s x86_64-linux-gnu /usr/include/i386-linux-gnu && \
 	ln -s x86_64-linux-gnu /usr/include/x86_64-linux-gnux32 && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y autoconf autopoint bison curl gettext libtool pkg-config && \
@@ -33,7 +29,7 @@ RUN rm -rf /usr/lib*/gconv
 
 # Prepare deploy directory
 RUN mkdir -p /deploy/lib/x86_64-linux-gnu /deploy/usr/lib/x86_64-linux-gnu && \
-	find /lib /usr/lib '(' -name 'ld-*' -o -name 'libanl*' -o -name 'libBrokenLocale*' -o -name 'libc[.-]*' -o -name 'libcidn*' -o -name 'libcrypt[.-]*' -o -name 'libdl*' -o -name 'libfreebl*' -o -name 'libgcc_s*' -o -name 'libm[.-]*' -o -name 'libmvec*' -o -name 'libnsl*' -o -name 'libnss*' -o -name 'libpthread*' -o -name 'libresolv*' -o -name 'librt[.-]*' -o -name 'libstdc++*' -o -name 'libthread_db*' -o -name 'libutil*' -o -name 'libuuid*' -o -name 'libz*' -o -name '*.o' -o -name '*.a' -o \
+	find /lib /usr/lib '(' -name 'ld-*' -o -name 'libanl*' -o -name 'libBrokenLocale*' -o -name 'libc[.-]*' -o -name 'libcidn*' -o -name 'libcrypt[.-]*' -o -name 'libdl*' -o -name 'libfreebl*' -o -name 'libgcc_s*' -o -name 'libm[.-]*' -o -name 'libnsl*' -o -name 'libnss*' -o -name 'libpthread*' -o -name 'libresolv*' -o -name 'librt[.-]*' -o -name 'libstdc++*' -o -name 'libthread_db*' -o -name 'libutil*' -o -name 'libuuid*' -o -name 'libz*' -o -name '*.o' -o -name '*.a' -o \
 		-name 'libbfd*' -o -name 'libcloog*' -o -name 'libgmp*' -o -name 'libgomp*' -o -name 'libisl*' -o -name 'libmemusage*' -o -name 'libmpc*' -o -name 'libmpfr*' -o -name 'libopcodes*' -o -name 'libpcprofile*' ')' -exec cp -al {} /deploy{} \; && \
 	cp -al /lib64 /lib32 /libx32 /deploy/ && \
 	cp -al /usr/lib/gcc /usr/lib/gcc-cross /usr/lib/gold-ld /deploy/usr/lib/
@@ -42,7 +38,7 @@ RUN mkdir -p /deploy/usr/bin && \
 	find /usr/bin '(' -name '*-addr2line' -o -name '*-ar' -o -name '*-as' -o -name '*-c++filt' -o -name '*-elfedit' -o -name '*-g++*' -o -name '*-gcc*' -o -name '*-gcov*' -o -name '*-gprof' -o -name '*-ld' -o -name '*-ld.*' -o -name '*-nm' -o -name '*-objcopy' -o -name '*-objdump' -o -name '*-ranlib' -o -name '*-readelf' -o -name '*-size' -o -name '*-strings' -o -name '*-strip' -o \
 		-name 'addr2line' -o -name 'ar' -o -name 'as' -o -name 'c++filt' -o -name 'elfedit' -o -name 'g++*' -o -name 'gcc*' -o -name 'gcov*' -o -name 'gold' -o -name 'gprof' -o -name 'ld' -o -name 'ld.*' -o -name 'nm' -o -name 'objcopy' -o -name 'objdump' -o -name 'ranlib' -o -name 'readelf' -o -name 'size' -o -name 'strings' -o -name 'strip' ')' -exec cp -al {} /deploy{} \;
 
-RUN cp -al /usr/include /usr/lib32 /usr/libx32 /usr/aarch64-linux-gnu /usr/arm-linux-gnueabihf /usr/powerpc64le-linux-gnu /usr/powerpc-linux-gnu /deploy/usr/
+RUN cp -al /usr/include /usr/lib32 /usr/libx32 /usr/aarch64-linux-gnu /usr/arm-linux-gnueabihf /usr/powerpc64le-linux-gnu /usr/powerpc-linux-gnu /usr/x86_64-linux-gnu /deploy/usr/
 
 # Deploy
 FROM scratch AS deploy
