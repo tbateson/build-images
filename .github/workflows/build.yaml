@@ -16,9 +16,10 @@ jobs:
       max-parallel: 1
       matrix:
         tags:
-        - cxx-Xenial
-        - cxx-Trusty
+        - cxx-Alpine
         # - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
+        - cxx-Trusty
+        - cxx-Xenial
 
     steps:
     - uses: actions/checkout@v2.3.4
