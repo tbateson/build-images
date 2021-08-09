@@ -12,13 +12,39 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      max-parallel: 1
+      matrix:
+        tags:
+        - cxx-Xenial
+        - cxx-Trusty
+        # - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
+
     steps:
     - uses: actions/checkout@v2.3.4
 
-    - name: Build Docker Images
-      run: ./build.sh
+    - name: Build Docker Image
+      run: |
+        docker build ${{ matrix.tags }} --tag 76eddge/build-images:${{ matrix.tags }} --target deploy
       env:
         DOCKER_BUILDKIT: 1
+
+    - id: anchore-scan
+      name: Run Anchore Scan
+      uses: anchore/scan-action@v2.0.4
+      with:
+        image: '76eddge/build-images:${{ matrix.tags }}'
+        acs-report-enable: true
+
+    - name: Store Anchore Scan Results
+      run: |
+        mkdir -p scan-results
+        cp ${{ steps.anchore-scan.outputs.sarif }} scan-results/${{ matrix.tags }}.sarif
+
+    - name: Upload Anchore Scan Report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: scan-results/${{ matrix.tags }}.sarif
 
     - name: Login to DockerHub
       if: startsWith(github.ref, 'refs/tags/')
@@ -26,6 +52,4 @@ jobs:
 
     - name: Push Docker Images
       if: startsWith(github.ref, 'refs/tags/')
-      run: ./build.sh --push
-      env:
-        DOCKER_BUILDKIT: 1
+      run: docker push -a 76eddge/build-images

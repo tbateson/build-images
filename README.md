@@ -2,4 +2,4 @@
 The 76 EDDGE build images are created using the dockerfiles in this repository. They are pieced together into Kubernetes Pods and used to build separate components of different projects.
 
 ## Building
-All building is handled by the build.sh script. The images are only pushed to dockerhub when a release is created.
+The components necessary to build each image are stored in a top-level directory matching the tag for the image. All building and uploading is handled via the CI workflow scripts.
