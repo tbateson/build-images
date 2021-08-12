@@ -12,8 +12,8 @@ RUN mkdir -p /deploy/lib /deploy/usr/lib && \
 	cp -al /usr/lib/gcc /deploy/usr/lib/
 
 RUN mkdir -p /deploy/usr/bin && \
-	find /usr/bin '(' -name '*-addr2line' -o -name '*-ar' -o -name '*-as' -o -name '*-c++filt' -o -name '*-elfedit' -o -name '*-g++*' -o -name '*-gcc*' -o -name '*-gcov*' -o -name '*-gprof' -o -name '*-ld' -o -name '*-ld.*' -o -name '*-nm' -o -name '*-objcopy' -o -name '*-objdump' -o -name '*-ranlib' -o -name '*-readelf' -o -name '*-size' -o -name '*-strings' -o -name '*-strip' -o \
-		-name 'addr2line' -o -name 'ar' -o -name 'as' -o -name 'c++filt' -o -name 'elfedit' -o -name 'g++*' -o -name 'gcc*' -o -name 'gcov*' -o -name 'gold' -o -name 'gprof' -o -name 'ld' -o -name 'ld.*' -o -name 'nm' -o -name 'objcopy' -o -name 'objdump' -o -name 'ranlib' -o -name 'readelf' -o -name 'size' -o -name 'strings' -o -name 'strip' ')' -exec cp -al {} /deploy{} \;
+	find /usr/bin '(' -name '*-addr2line' -o -name '*-ar' -o -name '*-as' -o -name '*-c++filt' -o -name '*-cpp*' -o -name '*-elfedit' -o -name '*-g++*' -o -name '*-gcc*' -o -name '*-gcov*' -o -name '*-gprof' -o -name '*-ld' -o -name '*-ld.*' -o -name '*-nm' -o -name '*-objcopy' -o -name '*-objdump' -o -name '*-ranlib' -o -name '*-readelf' -o -name '*-size' -o -name '*-strings' -o -name '*-strip' -o \
+		-name 'addr2line' -o -name 'ar' -o -name 'as' -o -name 'c++filt' -o -name 'cpp*' -o -name 'elfedit' -o -name 'g++*' -o -name 'gcc*' -o -name 'gcov*' -o -name 'gold' -o -name 'gprof' -o -name 'ld' -o -name 'ld.*' -o -name 'nm' -o -name 'objcopy' -o -name 'objdump' -o -name 'ranlib' -o -name 'readelf' -o -name 'size' -o -name 'strings' -o -name 'strip' ')' -exec cp -al {} /deploy{} \;
 
 RUN cp -al /usr/include /usr/libexec /deploy/usr/
 
