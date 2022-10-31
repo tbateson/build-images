@@ -2,10 +2,10 @@ name: Build
 
 on:
   push:
-  pull_request:
-    branches:
-    - main
-  workflow_dispatch:
+    branches: ['**']
+    tags-ignore: ['**']
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -13,11 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      max-parallel: 1
       matrix:
         tags:
         - cxx-Alpine
-        #- cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
+        # - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
         - cxx-Trusty
         - cxx-Xenial
 
@@ -47,9 +46,44 @@ jobs:
         sarif_file: scan-results/${{ matrix.tags }}.sarif
 
     - name: Login to DockerHub
-      if: startsWith(github.ref, 'refs/tags/')
+      if: github.event_name == 'release'
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
 
     - name: Push Docker Images
-      if: startsWith(github.ref, 'refs/tags/')
+      if: github.event_name == 'release'
+      run: docker push -a 76eddge/build-images
+
+  build-windows:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Docker Image
+      run: |
+        net stop docker
+        dockerd --unregister-service
+        dockerd --register-service --storage-opt "size=40G"
+        net start docker
+        docker build nifty_pascal-windows --tag 76eddge/build-images:nifty_pascal-windows
+
+    # Currently, the anchore scan action does not work on Windows images. Windows scanning is a also a premium-only feature for Anchore.
+    # - id: anchore-scan
+    #   name: Run Anchore Scan
+    #   uses: anchore/scan-action@v3
+    #   with:
+    #     image: '76eddge/build-images:nifty_pascal-windows'
+
+    # - name: Upload Anchore Scan Report
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   with:
+    #     sarif_file: ${{ steps.anchore-scan.outputs.sarif }}
+
+    - name: Login to DockerHub
+      if: github.event_name == 'release'
+      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
+
+    - name: Push Docker Images
+      if: github.event_name == 'release'
       run: docker push -a 76eddge/build-images

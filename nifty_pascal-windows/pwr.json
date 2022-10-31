@@ -1,0 +1,18 @@
+{
+	"packages": [
+		"jdk",
+		"gradle",
+		"jom",
+		"ninja",
+		"python",
+		"cmake",
+		"nasm",
+		"perl",
+		"erlang",
+		"vs-buildtools:17.2.3:msvc142-amd64",
+		"llvm",
+		"git",
+		"doxygen",
+		"node"
+	]
+}
