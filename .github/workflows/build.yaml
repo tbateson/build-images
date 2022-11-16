@@ -19,6 +19,7 @@ jobs:
         # - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
         - cxx-Trusty
         - cxx-Xenial
+        - nifty_pascal-linux
 
     steps:
     - uses: actions/checkout@v3
@@ -34,16 +35,13 @@ jobs:
       uses: anchore/scan-action@v3
       with:
         image: '76eddge/build-images:${{ matrix.tags }}'
-
-    - name: Store Anchore Scan Results
-      run: |
-        mkdir -p scan-results
-        cp ${{ steps.anchore-scan.outputs.sarif }} scan-results/${{ matrix.tags }}.sarif
+        fail-build: false
 
     - name: Upload Anchore Scan Report
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: scan-results/${{ matrix.tags }}.sarif
+        sarif_file: ${{ steps.anchore-scan.outputs.sarif }}
+        category: ${{ matrix.tags }}
 
     - name: Login to DockerHub
       if: github.event_name == 'release'
@@ -66,6 +64,7 @@ jobs:
         dockerd --unregister-service
         dockerd --register-service --storage-opt "size=40G"
         net start docker
+        cp nifty_pascal-linux/build.gradle nifty_pascal-windows/
         docker build nifty_pascal-windows --tag 76eddge/build-images:nifty_pascal-windows
 
     # Currently, the anchore scan action does not work on Windows images. Windows scanning is a also a premium-only feature for Anchore.
@@ -74,11 +73,13 @@ jobs:
     #   uses: anchore/scan-action@v3
     #   with:
     #     image: '76eddge/build-images:nifty_pascal-windows'
+    #     fail-build: false
 
     # - name: Upload Anchore Scan Report
     #   uses: github/codeql-action/upload-sarif@v2
     #   with:
     #     sarif_file: ${{ steps.anchore-scan.outputs.sarif }}
+    #     category: nifty_pascal-windows
 
     - name: Login to DockerHub
       if: github.event_name == 'release'
