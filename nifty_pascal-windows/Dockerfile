@@ -13,3 +13,6 @@ RUN pwr sh; \
 	gradle -i --no-daemon doxygen test clean --rerun-tasks --refresh-dependencies; \
 	pwr exit; \
 	rm -r -fo pwr.json, src, *.gradle
+
+# Create make.exe -> gmake.exe link
+RUN Get-ChildItem -Path $env:AppData\pwr\pkg\perl-* -Recurse -Include 'gmake.exe' | Select-Object -First 1 | ForEach-Object { New-Item -ItemType HardLink \"$($_.DirectoryName)\make.exe\" -Target $_ }
