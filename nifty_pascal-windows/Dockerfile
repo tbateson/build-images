@@ -10,7 +10,7 @@ COPY pwr.json *.gradle ./
 COPY src ./src/
 RUN pwr sh; \
 	pwr load sonar-scanner; \
-	gradle -i --no-daemon doxygen test clean --rerun-tasks --refresh-dependencies; \
+	gradle -i --no-daemon resolveDependencies --rerun-tasks --refresh-dependencies; \
 	pwr exit; \
 	rm -r -fo pwr.json, src, *.gradle
 

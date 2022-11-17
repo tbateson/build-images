@@ -19,20 +19,17 @@ dependencies {
 	implementation 'io.github.xs-parser:xs-parser:1.+'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
 	testImplementation 'io.github.xs-parser:xs-parser:2.+'
+	testImplementation 'org.commonmark:commonmark:0.+'
+	testImplementation 'org.commonmark:commonmark-ext-autolink:0.+'
+	testImplementation 'org.commonmark:commonmark-ext-gfm-tables:0.+'
 }
 
-test {
-	finalizedBy jacocoTestReport
-	useJUnitPlatform()
-}
-
-jacocoTestReport {
-	reports {
-		xml.required = true
-		html.required = true
+task resolveDependencies {
+	doLast {
+		configurations.all {
+			if (it.canBeResolved) {
+				it.resolve()
+			}
+		}
 	}
-}
-
-doxygen {
-	source new File('build.gradle')
 }
