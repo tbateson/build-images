@@ -1,7 +1,7 @@
 FROM alpine AS deploy
 
 # Install build dependencies
-RUN apk add --no-cache afl++ curl file g++ make perl make git cmake patch sed util-linux-dev llvm-dev clang clang-analyzer doxygen chromium ttf-freefont nodejs py3-setuptools py3-lxml py3-jinja2 python3 samurai && \
+RUN apk add --no-cache afl++ curl file g++ make perl make git cmake patch sed util-linux-dev llvm-dev clang clang-analyzer doxygen chromium ttf-freefont nodejs py3-setuptools py3-lxml py3-jinja2 python3 samurai xz && \
 	ln -sf python3 /usr/bin/python
 
 # Install npm, gradle, JDK from latest-stable for security fixes
@@ -18,12 +18,11 @@ RUN apk add --no-cache ca-certificates less ncurses-terminfo-base krb5-libs libg
 RUN apk add --no-cache erlang
 
 # Install cross compilers
-RUN apk add --no-cache xz && \
-	for Arch in aarch64-linux-musl arm-linux-musleabihf i686-linux-musl powerpc64le-linux-musl x86_64-linux-musl x86_64-linux-muslx32; do \
+RUN for Arch in aarch64-linux-musl arm-linux-musleabihf i686-linux-musl powerpc64le-linux-musl x86_64-linux-musl x86_64-linux-muslx32; do \
 	mkdir -p "/opt/$Arch" && \
 	curl -sL "https://github.com/76-eddge/musl-cross/releases/download/v0.9.12/$Arch.tar.xz" | tar xJ -C "/opt/$Arch"; \
 	done; \
-	apk del --no-cache xz
+	find /opt/*/*/include/c++ -name c++config.h | xargs sed -i -re 's/^(\s*#\s*define\s+_GLIBCXX_HAVE_ATTRIBUTE_VISIBILITY).*/\1 0/'
 
 # Perform tasks as basic user
 RUN adduser --disabled-password jenkins
