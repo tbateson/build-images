@@ -31,19 +31,6 @@ jobs:
       env:
         DOCKER_BUILDKIT: 1
 
-    - id: anchore-scan
-      name: Run Anchore Scan
-      uses: anchore/scan-action@v3
-      with:
-        image: '76eddge/build-images:${{ matrix.tags }}'
-        fail-build: false
-
-    - name: Upload Anchore Scan Report
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: ${{ steps.anchore-scan.outputs.sarif }}
-        category: ${{ matrix.tags }}
-
     - name: Login to DockerHub
       if: github.event_name == 'release'
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
@@ -51,6 +38,17 @@ jobs:
     - name: Push Docker Images
       if: github.event_name == 'release'
       run: docker push -a 76eddge/build-images
+
+    - name: Run Grype Scan
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/bin
+        grype -o sarif '76eddge/build-images:${{ matrix.tags }}' > ${{ matrix.tags }}.sarif
+
+    - name: Upload Grype Scan Results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{ matrix.tags }}.sarif
+        category: ${{ matrix.tags }}
 
   build-windows:
 
@@ -68,20 +66,6 @@ jobs:
         cp nifty_pascal-linux/build.gradle nifty_pascal-windows/
         docker build nifty_pascal-windows --tag 76eddge/build-images:nifty_pascal-windows
 
-    # Currently, the anchore scan action does not work on Windows images. Windows scanning is a also a premium-only feature for Anchore.
-    # - id: anchore-scan
-    #   name: Run Anchore Scan
-    #   uses: anchore/scan-action@v3
-    #   with:
-    #     image: '76eddge/build-images:nifty_pascal-windows'
-    #     fail-build: false
-
-    # - name: Upload Anchore Scan Report
-    #   uses: github/codeql-action/upload-sarif@v2
-    #   with:
-    #     sarif_file: ${{ steps.anchore-scan.outputs.sarif }}
-    #     category: nifty_pascal-windows
-
     - name: Login to DockerHub
       if: github.event_name == 'release'
       run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
@@ -89,3 +73,14 @@ jobs:
     - name: Push Docker Images
       if: github.event_name == 'release'
       run: docker push -a 76eddge/build-images
+
+    - name: Run Grype Scan
+      run: |
+        choco install grype
+        grype -o sarif '76eddge/build-images:nifty_pascal-windows' | Out-File nifty_pascal-windows.sarif utf8
+
+    - name: Upload Grype Scan Results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: nifty_pascal-windows.sarif
+        category: nifty_pascal-windows
