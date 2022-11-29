@@ -1,7 +1,7 @@
 FROM alpine AS deploy
 
 # Install build dependencies
-RUN apk add --no-cache afl++ chromium clang clang-analyzer cmake curl doxygen file g++ git linux-headers make nodejs patch perl py3-jinja2 py3-lxml py3-setuptools python3 samurai sed util-linux-dev xz && \
+RUN apk add --no-cache afl++ chromium clang clang-analyzer cmake curl doxygen file g++ git git-lfs linux-headers make nodejs patch perl py3-jinja2 py3-lxml py3-setuptools python3 samurai sed util-linux-dev xz && \
 	ln -sf python3 /usr/bin/python
 
 # Install npm, gradle, JDK from latest-stable for security fixes
