@@ -15,9 +15,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tags:
+        tag:
         - cxx-Alpine
-        # - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
+        - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
         - cxx-Trusty
         - cxx-Xenial
         - nifty_pascal-linux
@@ -27,12 +27,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: docker/setup-buildx-action@v2
 
     - name: Build Docker Image
-      run: |
-        docker build ${{ matrix.tags }} --tag 76eddge/build-images:${{ matrix.tags }} --target deploy
-      env:
-        DOCKER_BUILDKIT: 1
+      uses: docker/build-push-action@v3
+      with:
+        cache-from: type=gha,scope=${{ matrix.target }}
+        cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+        context: ${{ matrix.tag }}
+        outputs: type=docker
+        tags: 76eddge/build-images:${{ matrix.tag }}
+        target: deploy
 
     - name: Login to DockerHub
       if: github.event_name == 'release'
@@ -45,13 +50,13 @@ jobs:
     - name: Run Grype Scan
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/bin
-        grype -o sarif '76eddge/build-images:${{ matrix.tags }}' > ${{ matrix.tags }}.sarif
+        grype -o sarif '76eddge/build-images:${{ matrix.tag }}' > ${{ matrix.tag }}.sarif
 
     - name: Upload Grype Scan Results
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: ${{ matrix.tags }}.sarif
-        category: ${{ matrix.tags }}
+        sarif_file: ${{ matrix.tag }}.sarif
+        category: ${{ matrix.tag }}
 
   build-windows:
 
