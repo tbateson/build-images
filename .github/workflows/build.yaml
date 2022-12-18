@@ -32,8 +32,8 @@ jobs:
     - name: Build Docker Image
       uses: docker/build-push-action@v3
       with:
-        cache-from: type=gha,scope=${{ matrix.target }}
-        cache-to: type=gha,mode=max,scope=${{ matrix.target }}
+        cache-from: type=gha,scope=${{ matrix.tag }}
+        cache-to: type=gha,mode=max,scope=${{ matrix.tag }}
         context: ${{ matrix.tag }}
         outputs: type=docker
         tags: 76eddge/build-images:${{ matrix.tag }}
@@ -48,11 +48,13 @@ jobs:
       run: docker push -a 76eddge/build-images
 
     - name: Run Grype Scan
+      if: github.event_name != 'release'
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/bin
         grype -o sarif '76eddge/build-images:${{ matrix.tag }}' > ${{ matrix.tag }}.sarif
 
     - name: Upload Grype Scan Results
+      if: github.event_name != 'release'
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: ${{ matrix.tag }}.sarif
@@ -83,11 +85,13 @@ jobs:
       run: docker push -a 76eddge/build-images
 
     - name: Run Grype Scan
+      if: github.event_name != 'release'
       run: |
         choco install grype
         grype -o sarif '76eddge/build-images:nifty_pascal-windows' | Out-File nifty_pascal-windows.sarif utf8
 
     - name: Upload Grype Scan Results
+      if: github.event_name != 'release'
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: nifty_pascal-windows.sarif
