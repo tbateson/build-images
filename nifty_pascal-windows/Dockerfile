@@ -10,6 +10,7 @@ COPY pwr.json *.gradle ./
 RUN pwr sh; \
 	pwr load sonar-scanner; \
 	gradle -i --no-daemon resolveDependencies --rerun-tasks --refresh-dependencies; \
+	if (-not $?) { throw \"gradle failed with exit code $LASTEXITCODE\" }; \
 	pwr exit; \
 	rm -r -fo pwr.json, *.gradle
 
