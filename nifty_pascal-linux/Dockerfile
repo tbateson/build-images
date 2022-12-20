@@ -1,7 +1,7 @@
 FROM alpine AS deploy
 
 # Install build dependencies
-RUN apk add --no-cache afl++ chromium clang clang-analyzer cmake curl doxygen file gdb g++ git git-lfs linux-headers make nodejs patch perl py3-jinja2 py3-lxml py3-setuptools python3 samurai sed util-linux-dev xz && \
+RUN apk add --no-cache afl++ chromium clang clang-analyzer cmake curl doxygen file fontconfig gdb g++ git git-lfs linux-headers make msttcorefonts-installer nodejs patch perl py3-jinja2 py3-lxml py3-setuptools python3 samurai sed util-linux-dev xz && \
 	ln -sf python3 /usr/bin/python
 
 # Install npm, gradle, JDK from latest-stable for security fixes
@@ -28,6 +28,10 @@ RUN for Arch in aarch64-linux-musl arm-linux-musleabihf i686-linux-musl powerpc6
 RUN adduser --disabled-password jenkins
 USER jenkins
 WORKDIR /home/jenkins
+
+# Install fonts for user
+RUN mkdir -p ~/.fonts && curl -s -L http://plasmasturm.org/dl/vistafonts-installer | sed -e 's/{,b,i,z}/*/g' | sh && \
+	curl -s -L https://github.com/mrbvrz/segoe-ui-linux/raw/master/install.sh | sed -e 's/\scontinueFont$/ fontinstall/' | sh
 
 # Initialize npm
 COPY --chown=jenkins package.json ./
