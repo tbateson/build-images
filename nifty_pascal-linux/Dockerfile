@@ -30,8 +30,10 @@ USER jenkins
 WORKDIR /home/jenkins
 
 # Install fonts for user
-RUN mkdir -p ~/.fonts && curl -s -L http://plasmasturm.org/dl/vistafonts-installer | sed -e 's/{,b,i,z}/*/g' | sh && \
-	curl -s -L https://github.com/mrbvrz/segoe-ui-linux/raw/master/install.sh | sed -e 's/\scontinueFont$/ fontinstall/' | sh
+RUN mkdir -p ~/.fonts && \
+	curl -s -L https://github.com/mrbvrz/segoe-ui-linux/archive/02f6e1e9290581e7fc9bf3beefc0ebc9ec8c1611.zip | unzip -d ~/.fonts -j - '*/font/*' && \
+	curl -s -L -o ~/.fonts/seguisym.ttf https://github.com/microsoft/elfie-arriba/raw/6889a336985caf20ac596a7ff681362423ef5052/Arriba/Arriba.Web/fonts/SEGUISYM.TTF && \
+	curl -s -L http://plasmasturm.org/dl/vistafonts-installer | sed -e 's/{,b,i,z}/*/g' | sh
 
 # Initialize npm
 COPY --chown=jenkins package.json ./
