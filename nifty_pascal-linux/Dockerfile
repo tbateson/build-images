@@ -33,15 +33,19 @@ WORKDIR /home/jenkins
 RUN mkdir -p ~/.fonts && \
 	curl -s -L https://github.com/mrbvrz/segoe-ui-linux/archive/02f6e1e9290581e7fc9bf3beefc0ebc9ec8c1611.zip | unzip -d ~/.fonts -j - '*/font/*' && \
 	curl -s -L -o ~/.fonts/seguisym.ttf https://github.com/microsoft/elfie-arriba/raw/6889a336985caf20ac596a7ff681362423ef5052/Arriba/Arriba.Web/fonts/SEGUISYM.TTF && \
-	curl -s -L http://plasmasturm.org/dl/vistafonts-installer | sed -e 's/{,b,i,z}/*/g' | sh
+	curl -s -L http://plasmasturm.org/dl/vistafonts-installer | sed -e 's/{,b,i,z}/*/g' | sh && \
+	rm -f *.exe
 
 # Initialize npm
-COPY --chown=jenkins package.json ./
-RUN npm install && \
-	npm audit
+COPY --chown=jenkins package.json ./npm-init/
+RUN cd npm-init && \
+	npm install && \
+	npm audit && \
+	cd .. && \
+	rm -rf npm-init
 
 # Initialize gradle
-COPY --chown=jenkins build.gradle ./gradle-init/build.gradle
+COPY --chown=jenkins build.gradle ./gradle-init/
 RUN cd gradle-init && \
 	gradle -i --no-daemon resolveDependencies --rerun-tasks --refresh-dependencies && \
 	cd .. && \
