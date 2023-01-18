@@ -1,7 +1,6 @@
 {
 	"dependencies": {
 		"arg": "^5.0.2",
-		"prismjs" : "^1.29.0",
 		"mermaid": "^9.1.7",
 		"puppeteer": "^15.1.1",
 		"rehype-raw": "^6.1.1",
@@ -9,7 +8,8 @@
 		"rehype-stringify": "^9.0.3",
 		"remark": "^14.0.2",
 		"remark-gfm": "^3.0.1",
-		"remark-rehype": "^10.1.0"
+		"remark-rehype": "^10.1.0",
+		"pdf-lib": "^1.17.1"
 	},
 	"overrides": {
 		"d3-color": "3.1.0"
