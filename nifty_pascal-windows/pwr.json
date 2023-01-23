@@ -6,6 +6,7 @@
 		"ninja",
 		"python",
 		"cmake",
+		"cmake-converter",
 		"nasm",
 		"perl",
 		"erlang",
