@@ -39,7 +39,7 @@ RUN mkdir -p ~/.fonts && \
 # Initialize npm
 COPY --chown=jenkins package.json ./npm-init/
 RUN cd npm-init && \
-	npm install && \
+	npm install --install-strategy=shallow && \
 	npm audit && \
 	cd .. && \
 	rm -rf npm-init
