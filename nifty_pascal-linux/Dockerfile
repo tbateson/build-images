@@ -38,9 +38,9 @@ RUN mkdir -p ~/.fonts && \
 
 # Initialize npm
 COPY --chown=jenkins package.json ./npm-init/
-RUN cd npm-init && \
-	npm install --install-strategy=shallow && \
-	npm audit && \
+RUN PUPPETEER_SKIP_DOWNLOAD=true cd npm-init && \
+	npm install && \
+	npm install puppeteer@15 && \
 	cd .. && \
 	rm -rf npm-init
 

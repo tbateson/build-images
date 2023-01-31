@@ -1,15 +1,15 @@
 {
 	"dependencies": {
-		"arg": "^5.0.2",
-		"mermaid": "^9.1.7",
-		"puppeteer": "^15.1.1",
-		"rehype-raw": "^6.1.1",
-		"rehype-slug": "^5.0.1",
-		"rehype-stringify": "^9.0.3",
-		"remark": "^14.0.2",
-		"remark-gfm": "^3.0.1",
-		"remark-rehype": "^10.1.0",
-		"pdf-lib": "^1.17.1"
+		"arg": "5",
+		"mermaid": "9",
+		"pdf-lib": "1",
+		"puppeteer": "19",
+		"rehype-raw": "6",
+		"rehype-slug": "5",
+		"rehype-stringify": "9",
+		"remark": "14",
+		"remark-gfm": "3",
+		"remark-rehype": "10"
 	},
 	"overrides": {
 		"d3-color": "3.1.0"
