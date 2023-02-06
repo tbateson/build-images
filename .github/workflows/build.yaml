@@ -72,7 +72,7 @@ jobs:
       run: |
         net stop docker
         dockerd --unregister-service
-        dockerd --register-service --storage-opt "size=40G"
+        dockerd --register-service --storage-opt "size=60G"
         net start docker
         cp nifty_pascal-linux/build.gradle nifty_pascal-windows/
         docker build nifty_pascal-windows --tag 76eddge/build-images:nifty_pascal-windows
