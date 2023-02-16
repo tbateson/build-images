@@ -24,6 +24,7 @@ jobs:
         - cxx-extras-Alpine
         - packaging-utils-Alpine
         - python-latex-Alpine
+        - java-runtime-Alpine
 
     steps:
     - uses: actions/checkout@v3
