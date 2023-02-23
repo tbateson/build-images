@@ -18,9 +18,9 @@ RUN apk add --no-cache ca-certificates less ncurses-terminfo-base krb5-libs libg
 RUN apk add --no-cache erlang
 
 # Install cross compilers
-RUN for Arch in aarch64-linux-musl arm-linux-musleabihf i686-linux-musl powerpc64le-linux-musl x86_64-linux-musl x86_64-linux-muslx32; do \
+RUN for Arch in aarch64-linux-musl arm-linux-musleabihf i686-linux-musl powerpc64le-linux-musl powerpc-linux-musl x86_64-linux-musl x86_64-linux-muslx32; do \
 	mkdir -p "/opt/$Arch" && \
-	curl -sL "https://github.com/76-eddge/musl-cross/releases/download/v0.9.17/$Arch.tar.xz" | tar xJ -C "/opt/$Arch"; \
+	curl -sL "https://github.com/76-eddge/musl-cross/releases/download/v0.9.20/$Arch.tar.xz" | tar xJ -C "/opt/$Arch"; \
 	done; \
 	find /opt/*/*/include/c++ -name c++config.h | xargs sed -i -re 's/^(\s*#\s*define\s+_GLIBCXX_HAVE_ATTRIBUTE_VISIBILITY).*/\1 0/'
 
