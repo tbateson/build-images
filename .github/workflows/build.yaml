@@ -22,6 +22,7 @@ jobs:
         - cxx-Xenial
         - nifty_pascal-linux
         - cxx-extras-Alpine
+        - cxx-extras-Jammy
         - packaging-utils-Alpine
         - python-latex-Alpine
         - java-runtime-Alpine
