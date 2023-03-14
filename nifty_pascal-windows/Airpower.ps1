@@ -3,7 +3,6 @@ $script:AirpowerPackages =
 	'cmake',
 	'doxygen',
 	'erlang',
-	'git',
 	'gradle',
 	'jdk',
 	'jom',
@@ -13,4 +12,5 @@ $script:AirpowerPackages =
 	'node',
 	'perl',
 	'python',
-	"vs-buildtools"
+	"vs-buildtools",
+	'git'

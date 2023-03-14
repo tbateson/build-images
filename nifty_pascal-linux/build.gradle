@@ -12,13 +12,14 @@ repositories {
 
 dependencies {
 	implementation 'org.ow2.asm:asm:9.+'
-	implementation 'com.github.horseshoe:horseshoe:1.+'
+	implementation 'com.github.horseshoe:horseshoe:2.+'
 	implementation 'org.commonmark:commonmark:0.+'
 	implementation 'org.commonmark:commonmark-ext-autolink:0.+'
 	implementation 'org.commonmark:commonmark-ext-gfm-tables:0.+'
 	implementation 'io.github.xs-parser:xs-parser:1.+'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
 	testImplementation 'io.github.xs-parser:xs-parser:2.+'
+	testImplementation 'com.github.horseshoe:horseshoe:1.+'
 }
 
 task resolveDependencies {
