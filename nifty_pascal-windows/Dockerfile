@@ -10,7 +10,7 @@ RUN Install-PackageProvider -Name NuGet -Force; \
 FROM pwr AS deploy
 COPY Airpower.ps1 *.gradle ./
 RUN pwr pull sonar-scanner; \
-	pwr exec -ScriptBlock { gradle -i --no-daemon resolveDependencies --rerun-tasks --refresh-dependencies }; \
+	pwr exec -ScriptBlock { gradle -i --no-daemon resolveDependencies --refresh-dependencies }; \
 	if (-not $?) { throw \"gradle failed with exit code $LASTEXITCODE\" }; \
 	rm -r -fo Airpower.ps1, *.gradle
 

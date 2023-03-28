@@ -46,7 +46,7 @@ RUN PUPPETEER_SKIP_DOWNLOAD=true cd npm-init && \
 # Initialize gradle
 COPY --chown=jenkins build.gradle ./gradle-init/
 RUN cd gradle-init && \
-	gradle -i --no-daemon resolveDependencies --rerun-tasks --refresh-dependencies && \
+	gradle -i --no-daemon resolveDependencies --refresh-dependencies && \
 	cd .. && \
 	rm -rf gradle-init
 
