@@ -26,6 +26,7 @@ jobs:
         - packaging-utils-Alpine
         - python-latex-Alpine
         - java-runtime-Alpine
+        - java-runtime-rhel7
 
     steps:
     - uses: actions/checkout@v3
