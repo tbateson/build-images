@@ -27,6 +27,7 @@ jobs:
         - python-latex-Alpine
         - java-runtime-Alpine
         - java-runtime-rhel7
+        - buildtools-rhel7
 
     steps:
     - uses: actions/checkout@v3
