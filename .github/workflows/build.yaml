@@ -27,6 +27,7 @@ jobs:
         - python-latex-Alpine
         - java-runtime-Alpine
         - java-runtime-rhel7
+        - java-psycopg2-rhel7
         - buildtools-rhel7
 
     steps:
