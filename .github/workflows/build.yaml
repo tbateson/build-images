@@ -29,6 +29,7 @@ jobs:
         - java-runtime-rhel7
         - java-psycopg2-rhel7
         - buildtools-rhel7
+        - node-custom
 
     steps:
     - uses: actions/checkout@v3
