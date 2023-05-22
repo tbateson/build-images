@@ -1,6 +1,6 @@
 FROM node:latest AS deploy
 
-RUN npm i -g \
+RUN npm i --save-dev -g \
 @angular/animations@14.2.4 \
 @angular/cdk@14.2.4 \
 @angular/common@14.2.4 \
@@ -14,7 +14,7 @@ RUN npm i -g \
 rxjs@7.5.0 \
 zone.js@0.11.4 \
 @angular-devkit/build-angular@14.2.4 \
-@angular/cli@15.1.4 \
+@angular/cli@14.2.4 \
 @angular/compiler-cli@14.2.4 \
 @babel/core@7.19.3 \
 @compodoc/compodoc@1.1.19 \
