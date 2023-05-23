@@ -20,16 +20,6 @@ jobs:
         - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
         - cxx-Trusty
         - cxx-Xenial
-        - nifty_pascal-linux
-        - cxx-extras-Alpine
-        - cxx-extras-Jammy
-        - packaging-utils-Alpine
-        - python-latex-Alpine
-        - java-runtime-Alpine
-        - java-runtime-rhel7
-        - java-psycopg2-rhel7
-        - buildtools-rhel7
-        - node-custom
 
     steps:
     - uses: actions/checkout@v3
@@ -65,40 +55,3 @@ jobs:
       with:
         sarif_file: ${{ matrix.tag }}.sarif
         category: ${{ matrix.tag }}
-
-  build-windows:
-
-    runs-on: windows-2019
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Build Docker Image
-      run: |
-        net stop docker
-        dockerd --unregister-service
-        dockerd --register-service --storage-opt "size=60G"
-        net start docker
-        cp nifty_pascal-linux/build.gradle nifty_pascal-windows/
-        docker build nifty_pascal-windows --tag 76eddge/build-images:nifty_pascal-windows
-
-    - name: Login to DockerHub
-      if: github.event_name == 'release'
-      run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username 76eddge --password-stdin
-
-    - name: Push Docker Images
-      if: github.event_name == 'release'
-      run: docker push -a 76eddge/build-images
-
-    - name: Run Grype Scan
-      if: github.event_name != 'release'
-      run: |
-        choco install grype
-        grype -o sarif '76eddge/build-images:nifty_pascal-windows' | Out-File nifty_pascal-windows.sarif utf8
-
-    - name: Upload Grype Scan Results
-      if: github.event_name != 'release'
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: nifty_pascal-windows.sarif
-        category: nifty_pascal-windows
