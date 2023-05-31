@@ -8,7 +8,7 @@ RUN strip /lib*/*.so* /usr/lib*/*.so* /usr/lib/gcc*/*/*/*/*.so* || echo Ignoring
 # Prepare deploy directory
 RUN mkdir -p /deploy/lib /deploy/usr/lib && \
 	find /lib /usr/lib '(' -name 'ld-*' -o -name 'libanl*' -o -name 'libBrokenLocale*' -o -name 'libc[.-]*' -o -name 'libcidn*' -o -name 'libcrypt[.-]*' -o -name 'libdl*' -o -name 'libfreebl*' -o -name 'libgcc_s*' -o -name 'libm[.-]*' -o -name 'libmvec*' -o -name 'libnsl*' -o -name 'libnss*' -o -name 'libpthread*' -o -name 'libresolv*' -o -name 'librt[.-]*' -o -name 'libstdc++*' -o -name 'libthread_db*' -o -name 'libutil*' -o -name 'libuuid*' -o -name 'libz*' -o -name '*.o' -o -name '*.a' -o \
-		-name 'libbfd*' -o -name 'libctf*' -o -name 'libcloog*' -o -name 'libgmp*' -o -name 'libgomp*' -o -name 'libisl*' -o -name 'libmemusage*' -o -name 'libmpc*' -o -name 'libmpfr*' -o -name 'libopcodes*' -o -name 'libpcprofile*' ')' -exec cp -al {} /deploy{} \; && \
+		-name 'libbfd*' -o -name 'libctf*' -o -name 'libcloog*' -o -name 'libgmp*' -o -name 'libgomp*' -o -name 'libisl*' -o -name 'libmemusage*' -o -name 'libmpc*' -o -name 'libmpfr*' -o -name 'libopcodes*' -o -name 'libpcprofile*' -o -name 'libsframe*' ')' -exec cp -al {} /deploy{} \; && \
 	cp -al /usr/lib/gcc /deploy/usr/lib/
 
 RUN mkdir -p /deploy/usr/bin && \
