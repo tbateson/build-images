@@ -20,6 +20,8 @@ jobs:
         - cxx-CentOS6 # CentOS 6 is EOL, so this image does not need to be rebuilt each time
         - cxx-Trusty
         - cxx-Xenial
+        - Lucid-gcc
+        - Precise-i386-gcc
 
     steps:
     - uses: actions/checkout@v3
