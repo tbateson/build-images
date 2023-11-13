@@ -22,6 +22,8 @@ jobs:
         - cxx-Xenial
         - Lucid-gcc
         - Precise-i386-gcc
+        - Trusty-gcc
+        - Trusty-i386-gcc
 
     steps:
     - uses: actions/checkout@v3
