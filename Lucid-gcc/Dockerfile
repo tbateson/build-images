@@ -1,5 +1,7 @@
 FROM ubuntu:lucid AS deploy
 
+CMD /bin/dash
+
 RUN sed -i -e 's/archive./old-releases./g' /etc/apt/sources.list && \
 	apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y g++ && \
