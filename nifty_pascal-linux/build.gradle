@@ -19,7 +19,7 @@ dependencies {
 	implementation 'org.commonmark:commonmark-ext-gfm-tables:0.+'
 	implementation 'io.github.xs-parser:xs-parser:1.+'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
-	testImplementation 'io.github.xs-parser:xs-parser:2.+'
+	testImplementation 'io.github.xs-parser:xs-parser:3.+'
 }
 
 task resolveDependencies {
